@@ -11,13 +11,7 @@ import (
 )
 
 func day1_1() {
-	bytes, err := os.ReadFile("day1_input")
-	if (err != nil) {
-		fmt.Println("There was an error reading a file")
-	}
-	lines := strings.Split(string(bytes), "\n")
-	// To remove the last empty item generated after splitting by \n
-	lines = lines[:len(lines) - 1]
+	lines := read_lines("day1_input")
 	sum := 0
 	for line_idx, line := range lines {
 		var number string
@@ -50,13 +44,7 @@ func day1_2() {
 	digits_s := []string{ "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" }
 	digits := []string{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
-	bytes, err := os.ReadFile("day1_input")
-	if (err != nil) {
-		fmt.Println("There was an error reading a file")
-	}
-	lines := strings.Split(string(bytes), "\n")
-	// To remove the last empty item generated after splitting by \n
-	lines = lines[:len(lines) - 1]
+	lines := read_lines("day1_input")
 	sum := 0
 	for _, line := range lines {
 		first_idx := math.MaxInt
@@ -117,13 +105,7 @@ func day1_2() {
 }
 
 func day2_1() {
-	bytes, err := os.ReadFile("day2_input")
-	if (err != nil) {
-		fmt.Println("There was an error reading a file")
-	}
-	lines := strings.Split(string(bytes), "\n")
-	// To remove the last empty item generated after splitting by \n
-	lines = lines[:len(lines) - 1]
+	lines := read_lines("day2_input")
 
 	max_red := 12
 	max_green := 13
@@ -169,14 +151,7 @@ func day2_1() {
 }
 
 func day2_2() {
-	bytes, err := os.ReadFile("day2_input")
-	if (err != nil) {
-		fmt.Println("There was an error reading a file")
-	}
-	lines := strings.Split(string(bytes), "\n")
-	// To remove the last empty item generated after splitting by \n
-	lines = lines[:len(lines) - 1]
-
+	lines := read_lines("day2_input")
 	sum := 0
 
 	for _, line := range lines {
@@ -198,7 +173,7 @@ func day2_2() {
 				color := ball[strings.Index(ball, " ")+1:]
 
 				num, _ := strconv.Atoi(num_s)
-				mins[color] = Max(mins[color], num)
+				mins[color] = max(mins[color], num)
 			}
 		}
 
@@ -209,14 +184,163 @@ func day2_2() {
 	fmt.Println(sum)
 }
 
+type engine_num struct {
+	value string
+	row int
+	start_idx int
+	adjacent bool
+}
+
+func day3_1() {
+	lines := read_lines("day3_input")
+	nums := []engine_num{}
+	line_len := len(lines[0])
+
+	// looping over the lines in the file
+	for line_idx, line := range lines {
+		var num engine_num
+		num.start_idx = -1
+
+		// looping over the characters in the line
+		for idx, char := range line {
+			
+			// if the current char is a digit
+			if unicode.IsDigit(char) {
+
+				// if it's a start of a number
+				if num.start_idx == -1 {
+					num.row = line_idx
+					num.start_idx = idx
+
+					// if the char before the start is a symbol
+					if idx != 0 && string(line[idx-1]) != "." {
+						num.adjacent = true
+					}
+				}
+
+				num.value += string(char)
+
+				// covering cases if the number ends at the end of the line
+				if idx + 1 == line_len {
+					nums = append(nums, num)
+
+					num.start_idx = -1
+					num.value = ""
+					num.adjacent = false
+				}
+
+				continue
+			}
+
+			// if it's symbol after the last in the prev number
+			if idx != 0 && unicode.IsDigit(rune(line[idx-1])) {
+				// if the char after the end is a symbol
+				if idx < len(line) && string(char) != "." {
+					num.adjacent = true
+				}
+				nums = append(nums, num)
+
+				num.start_idx = -1
+				num.value = ""
+				num.adjacent = false
+			}
+		}
+	}
+
+	lines_len := len(lines)
+	sum := 0
+
+	for _, num := range nums {
+		for i := max(num.start_idx - 1, 0); i < min(line_len, num.start_idx + len(num.value) + 1); i++ {
+			if num.row != 0 {
+				if string(lines[num.row - 1][i]) != "." {
+					num.adjacent = true
+					break
+				}
+			}
+
+			if num.row + 1 != lines_len {
+				if string(lines[num.row + 1][i]) != "." {
+					num.adjacent = true
+					break
+				}
+			}
+		}
+
+		if num.adjacent {
+			fmt.Println(num.value)
+			i, err := strconv.Atoi(num.value)
+			if err != nil {
+				fmt.Println("Error when converting value to int")
+			}	
+
+			sum += i
+		}
+	}
+	
+	for _, num := range nums {
+		if num.adjacent {
+
+		}
+	}
+
+	fmt.Println(sum)
+}
+
+func day4_1() {
+	lines := read_lines("d4_test")
+	sum := 0
+
+	numbers_count := len(lines[0]) - 1
+	for _, line := range lines {
+		numbers := strings.Split(line[strings.Index(line, ":")+1:], " ")
+
+		fmt.Println(numbers_count)
+
+		// -1 because we have a "|" there
+		set := make(map[int]int)
+		for _, num := range numbers {
+			i, err := strconv.Atoi(num)
+			if err != nil {
+				continue
+			}
+			set[i] = 0
+		}
+
+		wins_count := numbers_count - len(set)
+		fmt.Println(numbers_count)
+		// fmt.Println(2^max((wins_count-1), 0))
+		sum += 2^max((wins_count-1), 0)
+	}
+
+	fmt.Println(sum)
+}
+
 func main() {
-	day2_2()
+	day4_1()
 }
 
 // Utility functions
-func Max(x, y int) int {
+func max(x, y int) int {
 	if x < y {
 		return y
 	}
 	return x
+}
+
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func read_lines(file_name string) []string {
+	bytes, err := os.ReadFile(file_name)
+	if (err != nil) {
+		fmt.Println("There was an error reading a file")
+	}
+	lines := strings.Split(string(bytes), "\n")
+	// To remove the last empty item generated after splitting by \n
+	return lines[:len(lines) - 1]
 }
