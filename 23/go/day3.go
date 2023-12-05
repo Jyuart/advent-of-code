@@ -14,7 +14,7 @@ type engine_num struct {
 }
 
 func day3_1() {
-	lines := read_lines("inputs/day3_input")
+	lines := read_lines("inputs/day3_input", "\n")
 	nums := []engine_num{}
 	line_len := len(lines[0])
 

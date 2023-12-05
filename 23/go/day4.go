@@ -8,7 +8,7 @@ import (
 )
 
 func day4_1() {
-	lines := read_lines("inputs/day4_input")
+	lines := read_lines("inputs/day4_input", "\n")
 	sum := 0
 
 	for _, line := range lines {
@@ -40,7 +40,7 @@ func day4_1() {
 }
 
 func day4_2() {
-	lines := read_lines("inputs/day4_input")
+	lines := read_lines("inputs/day4_input", "\n")
 	sum := 0
 
 	for _, line := range lines {
