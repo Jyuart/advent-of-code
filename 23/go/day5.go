@@ -9,7 +9,7 @@ import (
 )
 
 func day5_1() {
-	bytes, err := os.ReadFile("inputs/test5")
+	bytes, err := os.ReadFile("inputs/day5_input")
 	if (err != nil) {
 		fmt.Println("There was an error reading a file")
 	}
@@ -28,17 +28,16 @@ func day5_1() {
 	for _, line_block := range line_blocks[1:] {
 		lines := strings.Split(strings.TrimRight(line_block, "\n"), "\n")
 		
-		fmt.Println(seeds)
-
-		for _, line := range lines[1:] {
-			nums := strings.Split(line, " ")
-			dest, _ := strconv.Atoi(nums[0])
-			src, _ := strconv.Atoi(nums[1])
-			rng, _ := strconv.Atoi(nums[2])
-
-			for seed_idx, seed := range seeds {
+		SEED:
+		for seed_idx, seed := range seeds {
+			for _, line := range lines[1:] {
+				nums := strings.Split(line, " ")
+				dest, _ := strconv.Atoi(nums[0])
+				src, _ := strconv.Atoi(nums[1])
+				rng, _ := strconv.Atoi(nums[2])
 				if seed >= src && seed <= src + rng {
 					seeds[seed_idx] = seed - src + dest
+					continue SEED
 				}
 			}
 		}
