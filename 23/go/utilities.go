@@ -20,12 +20,12 @@ func min(x, y int) int {
 	return y
 }
 
-func read_lines(file_name string, separator string) []string {
+func read_lines(file_name string) []string {
 	bytes, err := os.ReadFile(file_name)
 	if (err != nil) {
 		fmt.Println("There was an error reading a file")
 	}
-	lines := strings.Split(string(bytes), separator)
+	lines := strings.Split(string(bytes), "\n")
 	// To remove the last empty item generated after splitting by \n
 	return lines[:len(lines) - 1]
 }

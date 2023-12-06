@@ -7,7 +7,7 @@ import (
 )
 
 func day2_1() {
-	lines := read_lines("inputs/day2_input", "\n")
+	lines := read_lines("inputs/day2_input")
 
 	max_red := 12
 	max_green := 13
@@ -53,7 +53,7 @@ func day2_1() {
 }
 
 func day2_2() {
-	lines := read_lines("inputs/day2_input", "\n")
+	lines := read_lines("inputs/day2_input")
 	sum := 0
 
 	for _, line := range lines {

@@ -10,7 +10,7 @@ import (
 )
 
 func day1_1() {
-	lines := read_lines("inputs/day1_input", "\n")
+	lines := read_lines("inputs/day1_input")
 	sum := 0
 	for line_idx, line := range lines {
 		var number string
@@ -43,7 +43,7 @@ func day1_2() {
 	digits_s := []string{ "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" }
 	digits := []string{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }
 
-	lines := read_lines("inputs/day1_input", "\n")
+	lines := read_lines("inputs/day1_input")
 	sum := 0
 	for _, line := range lines {
 		first_idx := math.MaxInt
